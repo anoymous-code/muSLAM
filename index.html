@@ -115,7 +115,7 @@
     <h2>Real-Time Demo</h2>
     <p class="lead">Live mapping at native speed: the photorealistic Gaussian field grows incrementally while
     the per-primitive confidence field (blue: low, red: high) governs what the system trusts.</p>
-    <video controls preload="metadata" poster="static/teaser.png">
+    <video controls preload="metadata" poster="static/teaser.jpg">
       <source src="static/demo.mp4" type="video/mp4"/>
       Your browser does not support the video tag.
     </video>
@@ -130,7 +130,7 @@
     Splatting. Every Gaussian primitive carries an explicit <b>confidence</b> value, computed analytically from
     optimization dynamics at O(N) cost. This single quantity closes the loop on every major decision the system makes.</p>
     <figure>
-      <img src="static/teaser.png" alt="Hybrid uncertainty-aware map"/>
+      <img src="static/teaser.jpg" alt="Hybrid uncertainty-aware map"/>
       <figcaption>The hybrid map couples a photorealistic 3DGS field (left) with a per-primitive confidence field
       (right). Embedded <b>shadow Gaussians</b> (white circles) provide a globally consistent geometric backbone
       for tracking and loop closure.</figcaption>
@@ -204,7 +204,7 @@
     </figure>
 
     <figure>
-      <img src="static/tum_qualitative.png" alt="Qualitative results on TUM-RGBD"/>
+      <img src="static/tum_qualitative.jpg" alt="Qualitative results on TUM-RGBD"/>
       <figcaption>Online outputs across three challenging motion profiles: high view overlap, aggressive motion,
       and long-term navigation, plus novel-view synthesis against ground truth.</figcaption>
     </figure>
@@ -219,7 +219,7 @@
     The resulting maps directly support geometric navigation (98.3% success) and language-conditioned semantic
     navigation (90.0% end-to-end success).</p>
     <figure>
-      <img src="static/real_world.png" alt="Real-world robot experiments"/>
+      <img src="static/real_world.jpg" alt="Real-world robot experiments"/>
       <figcaption>Novel-view renderings of maps built online in a living room, an unmanned supermarket, and a
       meeting room, despite repetitive textures, reflective surfaces, and variable lighting.</figcaption>
     </figure>
