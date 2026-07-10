@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>μSLAM: Uncertainty-Driven 3D Gaussian Splatting for Robust Real-Time RGB-D SLAM</title>
+<meta name="description" content="Anonymous project page for the T-ASE submission: uncertainty-driven 3D Gaussian Splatting SLAM, real-time, robust, globally consistent."/>
+<style>
+  :root{
+    --accent:#3b5bdb; --accent-dark:#2f4bc0; --ink:#1c2333; --muted:#5b6478;
+    --bg:#ffffff; --bg-soft:#f5f7fb; --line:#e4e8f0; --card:#ffffff;
+    --radius:14px; --shadow:0 6px 24px rgba(28,35,51,.08);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+       color:var(--ink);background:var(--bg);line-height:1.65;font-size:17px}
+  .wrap{max-width:960px;margin:0 auto;padding:0 22px}
+
+  /* ---------- hero ---------- */
+  header{background:linear-gradient(180deg,#f2f5fc 0%,#ffffff 100%);
+         border-bottom:1px solid var(--line);padding:64px 0 44px;text-align:center}
+  .badge{display:inline-block;font-size:13px;font-weight:600;letter-spacing:.4px;
+         color:var(--accent);background:#e8edfb;border:1px solid #ccd6f6;
+         border-radius:999px;padding:5px 14px;margin-bottom:22px}
+  h1{font-size:clamp(26px,4.4vw,40px);line-height:1.22;font-weight:800;letter-spacing:-.5px}
+  h1 .mu{color:var(--accent)}
+  .subtitle{font-size:clamp(16px,2.2vw,20px);color:var(--muted);margin-top:12px;font-weight:500}
+  .authors{margin-top:18px;color:var(--muted);font-size:15px}
+  .authors b{color:var(--ink);font-weight:600}
+  .btns{margin-top:28px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:8px;border-radius:999px;
+       padding:11px 22px;font-size:15.5px;font-weight:600;text-decoration:none;
+       transition:transform .12s ease, box-shadow .12s ease}
+  .btn svg{width:17px;height:17px;flex:none}
+  .btn-primary{background:var(--accent);color:#fff;box-shadow:0 4px 14px rgba(59,91,219,.35)}
+  .btn-primary:hover{background:var(--accent-dark);transform:translateY(-1px)}
+  .btn-dark{background:#20242e;color:#fff}
+  .btn-dark:hover{background:#000;transform:translateY(-1px)}
+  .btn-ghost{background:#fff;color:var(--ink);border:1.5px solid var(--line)}
+  .btn-ghost:hover{border-color:#c3cbdd;transform:translateY(-1px)}
+
+  /* ---------- sections ---------- */
+  section{padding:52px 0}
+  section.soft{background:var(--bg-soft);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  h2{font-size:26px;font-weight:800;letter-spacing:-.3px;margin-bottom:8px;text-align:center}
+  .lead{color:var(--muted);text-align:center;max-width:760px;margin:0 auto 30px}
+  figure{margin:26px 0}
+  figure img{width:100%;border-radius:var(--radius);box-shadow:var(--shadow);display:block}
+  figcaption{font-size:14px;color:var(--muted);margin-top:12px;text-align:center;
+             max-width:820px;margin-left:auto;margin-right:auto}
+  video{width:100%;border-radius:var(--radius);box-shadow:var(--shadow);display:block;background:#000}
+
+  /* ---------- feature grid ---------- */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:26px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+        padding:22px;box-shadow:0 2px 10px rgba(28,35,51,.04)}
+  .card h3{font-size:16.5px;margin-bottom:6px;color:var(--accent-dark)}
+  .card p{font-size:14.5px;color:var(--muted)}
+
+  /* ---------- stats ---------- */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin:26px 0 6px}
+  .stat{background:#fff;border:1px solid var(--line);border-radius:var(--radius);
+        text-align:center;padding:22px 10px;box-shadow:0 2px 10px rgba(28,35,51,.04)}
+  .stat .num{font-size:30px;font-weight:800;color:var(--accent)}
+  .stat .lab{font-size:13.5px;color:var(--muted);margin-top:4px}
+
+  /* ---------- tables ---------- */
+  .tblwrap{overflow-x:auto;margin:24px 0}
+  table{border-collapse:collapse;width:100%;font-size:14.5px;background:#fff;
+        border-radius:var(--radius);overflow:hidden;box-shadow:0 2px 10px rgba(28,35,51,.05)}
+  th,td{padding:10px 14px;text-align:center;border-bottom:1px solid var(--line)}
+  th{background:#eef2fb;font-weight:700;color:var(--ink)}
+  td:first-child,th:first-child{text-align:left}
+  tr:last-child td{border-bottom:none}
+  tr.ours{background:#f0f4ff;font-weight:700}
+  .best{color:var(--accent-dark);font-weight:800}
+
+  footer{border-top:1px solid var(--line);padding:34px 0 44px;text-align:center;
+         color:var(--muted);font-size:14px}
+  footer a{color:var(--accent);text-decoration:none}
+  @media (max-width:560px){ body{font-size:16px} section{padding:38px 0} }
+</style>
+</head>
+<body>
+
+<!-- ================= HERO ================= -->
+<header>
+  <div class="wrap">
+    <span class="badge">IEEE T-ASE · Under Review · Double-Anonymous Submission</span>
+    <h1><span class="mu">μSLAM</span>: Uncertainty-Driven 3D Gaussian Splatting<br/>for Robust Real-Time RGB-D SLAM</h1>
+    <p class="subtitle">One per-primitive confidence value drives every major decision of the SLAM system —<br/>
+    keyframe selection, optimization, tracking, and loop closure.</p>
+    <p class="authors"><b>Anonymous Authors</b> · identities withheld for double-anonymous review</p>
+    <div class="btns">
+      <a class="btn btn-primary" href="#demo">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+        Demo Video
+      </a>
+      <a class="btn btn-dark" href="https://anonymous.4open.science/r/muSLAM" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+        Code
+      </a>
+      <a class="btn btn-ghost" href="#" onclick="return false;" title="Manuscript under double-anonymous review">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Paper (under review)
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ================= DEMO ================= -->
+<section id="demo">
+  <div class="wrap">
+    <h2>Real-Time Demo</h2>
+    <p class="lead">Live mapping at native speed: the photorealistic Gaussian field grows incrementally while
+    the per-primitive confidence field (blue: low, red: high) governs what the system trusts.</p>
+    <video controls preload="metadata" poster="static/teaser.png">
+      <source src="static/demo.mp4" type="video/mp4"/>
+      Your browser does not support the video tag.
+    </video>
+  </div>
+</section>
+
+<!-- ================= OVERVIEW ================= -->
+<section class="soft" id="overview">
+  <div class="wrap">
+    <h2>What is μSLAM?</h2>
+    <p class="lead">μSLAM is a real-time RGB-D SLAM system (&gt;30 FPS on a single GPU) built on 3D Gaussian
+    Splatting. Every Gaussian primitive carries an explicit <b>confidence</b> value, computed analytically from
+    optimization dynamics at O(N) cost. This single quantity closes the loop on every major decision the system makes.</p>
+    <figure>
+      <img src="static/teaser.png" alt="Hybrid uncertainty-aware map"/>
+      <figcaption>The hybrid map couples a photorealistic 3DGS field (left) with a per-primitive confidence field
+      (right). Embedded <b>shadow Gaussians</b> (white circles) provide a globally consistent geometric backbone
+      for tracking and loop closure.</figcaption>
+    </figure>
+    <div class="grid">
+      <div class="card"><h3>Produce once (P)</h3><p>Per-primitive confidence estimated from gradient and opacity
+        dynamics, with formally analyzed properties: boundedness, monotonicity, boundary conditions.</p></div>
+      <div class="card"><h3>C1 · Keyframe selection</h3><p>Rendered confidence approximates expected information
+        gain — only ~10.5% of frames are processed, at higher quality than classical heuristics.</p></div>
+      <div class="card"><h3>C2 · Adaptive optimization</h3><p>"Cautiously aggressive" per-primitive learning rates
+        with a proven convergence guarantee: rapid correction where uncertain, fine-tuning where converged.</p></div>
+      <div class="card"><h3>C3 · Tracking</h3><p>Confidence-weighted photometric residuals stop unreliable map
+        regions from biasing pose estimation.</p></div>
+      <div class="card"><h3>C4 · Loop closure &amp; PGO</h3><p>Coarse-to-fine correction on a unified sparse–dense
+        map; refinement residuals set the pose-graph edge covariances.</p></div>
+      <div class="card"><h3>Real-time</h3><p>&gt;30 FPS end-to-end with asynchronous mapping; runs onboard an
+        RTX 3090 for robot deployments.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= METHOD ================= -->
+<section id="method">
+  <div class="wrap">
+    <h2>How It Works</h2>
+    <p class="lead">A multi-stage, uncertainty-driven pipeline: a pre-processing front-end safeguards data
+    integrity, an uncertainty-aware back-end builds and refines the map, and an integrated coarse-to-fine
+    loop closure guarantees global consistency.</p>
+    <figure>
+      <img src="static/pipeline.png" alt="System pipeline"/>
+      <figcaption>System architecture. The confidence C<sub>i</sub> is produced once per mapping iteration and
+      consumed at four decision points (C1–C4) across the pipeline.</figcaption>
+    </figure>
+    <figure style="max-width:620px;margin-left:auto;margin-right:auto">
+      <img src="static/confidence_module.png" alt="Confidence estimation module"/>
+      <figcaption>The differentiable confidence module maps observable optimization dynamics — gradient magnitude
+      and opacity — to a per-primitive confidence value with mean-normalized global adaptation.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ================= RESULTS ================= -->
+<section class="soft" id="results">
+  <div class="wrap">
+    <h2>Results</h2>
+    <p class="lead">State-of-the-art tracking and rendering among rendering-based methods, with the robustness
+    and speed required for real robots.</p>
+
+    <div class="stats">
+      <div class="stat"><div class="num">2.24 cm</div><div class="lab">avg. ATE RMSE, TUM-RGBD<br/>(best of all rendering-based)</div></div>
+      <div class="stat"><div class="num">&gt;30 FPS</div><div class="lab">consistent real-time operation</div></div>
+      <div class="stat"><div class="num">100%</div><div class="lab">success on 9 challenging sequences</div></div>
+      <div class="stat"><div class="num">23.20 dB</div><div class="lab">avg. PSNR, TUM-RGBD<br/>(best online map quality)</div></div>
+    </div>
+
+    <div class="tblwrap">
+      <table>
+        <tr><th>Method</th><th>Loop closure</th><th>Real-time</th><th>desk</th><th>desk2</th><th>room</th><th>xyz</th><th>office</th><th>Avg. ↓</th></tr>
+        <tr><td>SplaTAM</td><td>✗</td><td>✗</td><td>3.35</td><td>6.54</td><td>11.13</td><td>1.24</td><td>5.16</td><td>5.48</td></tr>
+        <tr><td>Photo-SLAM</td><td>✗</td><td>✗</td><td>1.87</td><td>2.86</td><td>5.77</td><td>0.38</td><td class="best">1.42</td><td>2.46</td></tr>
+        <tr><td>2DGS-SLAM</td><td>✓</td><td>✗</td><td>1.84</td><td>2.76</td><td>5.98</td><td>1.16</td><td>1.97</td><td>2.74</td></tr>
+        <tr class="ours"><td>μSLAM (ours)</td><td>✓</td><td>✓</td><td>1.67</td><td class="best">2.45</td><td class="best">5.35</td><td class="best">0.30</td><td class="best">1.42</td><td class="best">2.24</td></tr>
+      </table>
+    </div>
+    <p style="text-align:center;font-size:14px;color:var(--muted)">Tracking accuracy (ATE RMSE, cm) on TUM-RGBD. Full benchmarks — including ScanNet, robustness, and ablations — are reported in the paper.</p>
+
+    <figure>
+      <img src="static/blur_comparison.jpg" alt="Robustness to motion blur"/>
+      <figcaption>Under aggressive motion at a loop closure, competing methods show ghosting from drift (a) and
+      blurring from unhandled motion artifacts (b); μSLAM (c) reconstructs fine details.</figcaption>
+    </figure>
+
+    <figure>
+      <img src="static/tum_qualitative.png" alt="Qualitative results on TUM-RGBD"/>
+      <figcaption>Online outputs across three challenging motion profiles: high view overlap, aggressive motion,
+      and long-term navigation, plus novel-view synthesis against ground truth.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ================= ROBOT ================= -->
+<section id="robot">
+  <div class="wrap">
+    <h2>Real-Robot Deployment</h2>
+    <p class="lead">Fully onboard (RTX 3090) online mapping on a wheeled robot across three environments.
+    The resulting maps directly support geometric navigation (98.3% success) and language-conditioned semantic
+    navigation (90.0% end-to-end success).</p>
+    <figure>
+      <img src="static/real_world.png" alt="Real-world robot experiments"/>
+      <figcaption>Novel-view renderings of maps built online in a living room, an unmanned supermarket, and a
+      meeting room, despite repetitive textures, reflective surfaces, and variable lighting.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ================= FOOTER ================= -->
+<footer>
+  <div class="wrap">
+    <p>Anonymous project page for double-anonymous review (IEEE T-ASE submission).</p>
+    <p style="margin-top:6px">Repository: <a href="https://anonymous.4open.science/r/muSLAM" target="_blank" rel="noopener">anonymous.4open.science/r/muSLAM</a> · Code released under the MIT License upon publication.</p>
+  </div>
+</footer>
+
+</body>
+</html>
